@@ -17,6 +17,16 @@ public class PlayerController : MonoBehaviour {
     public float attackValue = 10;
     HealthScript hlth;
     AttackScript attack;
+//Новые записи
+    [Range(1f,20f)]
+    [Serialize field]
+    private float moveSpeed;
+
+    using UnityStandardAssets.CrossPlatformInput;
+    dirX = CrossPlatformInput.GetAxis("Horizontal")*moveSpeed*Time.deltaTime;
+
+//Новые записи конец
+
     // Use this for initialization
     void Start () {
         rb = gameObject.GetComponent<Rigidbody2D>();
@@ -30,7 +40,7 @@ public class PlayerController : MonoBehaviour {
         hlth = gameObject.GetComponent<HealthScript>();
         attack = gameObject.GetComponent<AttackScript>();
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 
@@ -39,7 +49,7 @@ public class PlayerController : MonoBehaviour {
 
         //        Vector2 mov = new Vector2(move * speed , rb.velocity.y);
         if (move > 0 && isFacingRight) {
-            
+
             Flip();
         }else if (move<0 && !isFacingRight){
             Flip();
@@ -61,14 +71,14 @@ public class PlayerController : MonoBehaviour {
             anim.SetBool("isGrounded", true);
             if (jump > 0.1)
             {
-               
+
                 rb.velocity = new Vector2(rb.velocity.x, jumpStrength);
             }
         }
         else {
             anim.SetBool("isGrounded", false);
         }
-        
+
 
 
        // rb.AddForce(new Vector2(0,jump*jumpStrength));
@@ -84,15 +94,15 @@ public class PlayerController : MonoBehaviour {
     void Flip() {
         isFacingRight = !isFacingRight;
         gameObject.transform.localScale = new Vector3(-this.transform.localScale.x , transform.localScale.y, transform.localScale.z);
-    
+
     }
-   
+
     bool  isGrounded() {
         groundRay = Physics2D.Raycast(transform.position,-Vector2.up, rayLength, groundMask);
         if (groundRay) {
             return true;
         }
-        
+
         return false;
     }
 
